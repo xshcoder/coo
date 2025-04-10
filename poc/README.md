@@ -5,7 +5,7 @@
 **Coo** is a simplified social media platform inspired by Twitter. In this Proof of Concept (PoC), we use a **single service layer** with **microservices**. Each feature of the application is handled by its own microservice, such as user management, coo management, replies, likes, follows, and search functionalities. 
 
 The system allows users to:
-- Regiser a **User**
+- Register a **User**
 - Post a **Coo** (similar to a tweet)
 - **Reply** to a **Coo**
 - **Like** a **Coo**
@@ -54,18 +54,24 @@ The PoC is structured into the following microservices:
 
 #### Endpoints:
 
-- `POST /replies/reply/{cooId}` – Reply to a specific Coo
-- `GET /replies/coo/{cooId}` – Get all replies to a specific Coo
+- `POST /replies/cool/{cooId}` – Reply to a specific Coo
+- `POST /replies/reply/{replyId}` – Reply to a specific Reply
+- `GET /replies/cool/{cooId}` – Get all replies to a specific Coo
+- `GET /replies/reply/{replyId}` – Get all replies to a specific Reply (only 1 allowed)
 - `GET /replies/{replyId}` – Get a specific reply
 
 ### 3.4 Like Service
 
 #### Endpoints:
 
-- `POST /likes/{cooId}` – Like a specific Coo
-- `POST /likes/unlike/{cooId}` – Cancel like on a specific Coo
+- `POST /likes/coo/{cooId}` – Like a specific Coo
+- `POST /likes/coo/unlike/{cooId}` – Cancel like on a specific Coo
+- `POST /likes/reply/{replyId}` – Like a specific Reply
+- `POST /likes/reply/unlike/{replyId}` – Cancel like on a specific Reply
 - `GET /likes/coo/{cooId}` – Get all likes for a specific Coo
-- `GET /likes/count/coo/{cooId}` – Get all likes count for a specific Coo
+- `GET /likes/coo/count/{cooId}` – Get all likes count for a specific Coo
+- `GET /likes/reply/{replyId}` – Get all likes for a specific Reply
+- `GET /likes/reply/count/{replyId}` – Get all likes count for a specific Reply
 
 ### 3.5 Follow Service
 
@@ -126,6 +132,8 @@ classDiagram
         +uuid userId
         +string content
         +datetime createdAt
+        +uuid repliedToUserId
+        +uuid repliedToReplyId
     }
 ```
 
@@ -134,6 +142,7 @@ classDiagram
 classDiagram
     class Like {
         +uuid cooId
+        +uuid replyId
         +uuid userId
         +datetime likedAt
     }
