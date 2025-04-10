@@ -1,0 +1,15 @@
+Introduction
+
+Goal of the design
+
+poc
+
+analysis
+
+system architecture
+
+polished design
+
+verification
+
+afterthoughts
