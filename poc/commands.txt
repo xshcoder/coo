@@ -1,0 +1,61 @@
+docker ps
+docker logs <container_name_or_id>
+
+docker exec -it <container_name_or_id> bash
+docker inspect <container_name_or_id>
+
+psql -U your_username -d your_database
+
+List all tables in the current schema:
+\dt
+List all tables in all schemas:
+\dt *.*
+quit
+\q
+
+postgres database Port Forwarding (For Development)
+>kubectl port-forward svc/postgres-service 5432:5432
+
+user service port forwarding
+>kubectl port-forward svc/user-service 8080:80
+http://localhost:8080/swagger-ui/index.html
+
+add new coos table to existing coo_db
+psql -U coo_user -d coo_db -f /docker-entrypoint-initdb.d/init_coos.sql
+
+## add a table manually
+psql -U coo_user -d coo_db -f /docker-entrypoint-initdb.d/init_coos.sql
+
+## Delete the persistent database in Kubernetes
+You need to remove the PersistentVolume (PV) and PersistentVolumeClaim (PVC) associated with your PostgreSQL deployment.
+This will delete the data stored in the persistent volume.
+
+>kubectl delete pvc postgres-pvc
+>kubectl delete pv postgres-pv
+
+## get Kubernetes system pods and view logs
+>kubectl get pods -n kube-system
+>kubectl logs kube-controller-manager-docker-desktop -n kube-system
+
+## view ingress setup
+>kubectl describe ingress coo-ingress
+
+## get name ingress controller
+>kubectl get pods --all-namespaces
+
+## get logs of ingress controller
+>kubectl logs -n ingress-nginx ingress-nginx-controller-665b599bc5-gqqv4
+
+### patch ingress controller type to NodePort
+- kubectl patch service ingress-nginx-controller -n ingress-nginx -p "{\"spec\": {\"type\": \"NodePort\"}}"
+- kubectl get svc ingress-nginx-controller -n ingress-nginx
+
+### patch ingress controller type back to LoadBalancer
+- kubectl patch service ingress-nginx-controller -n ingress-nginx -p "{\"spec\": {\"type\": \"LoadBalancer\"}}"
+- kubectl get svc ingress-nginx-controller -n ingress-nginx
+
+### configure swagger-ui for ingress
+server.servlet.context-path=/user
+
+springdoc.swagger-ui.url=/user/v3/api-docs
+springdoc.swagger-ui.queryConfigEnabled=true
