@@ -47,7 +47,7 @@ The PoC is structured into the following microservices:
 
 - `POST /coos` – Post a new Coo (similar to a tweet)
 - `GET /coos/{cooId}` – Get a specific Coo
-- `GET /coos/user/{userId}` – Get all coos from a specific user
+- `GET /coos/user/{userId}` – Get coos from a specific user with pagination
 - `PUT /coos/{cooId}` – Update a specific Coo
 
 ### 3.3 Reply Service
@@ -56,8 +56,7 @@ The PoC is structured into the following microservices:
 
 - `POST /replies/cool/{cooId}` – Reply to a specific Coo
 - `POST /replies/reply/{replyId}` – Reply to a specific Reply
-- `GET /replies/cool/{cooId}` – Get all replies to a specific Coo
-- `GET /replies/reply/{replyId}` – Get all replies to a specific Reply (only 1 allowed)
+- `GET /replies/cool/{cooId}` – Get replies to a specific Coo with pagination
 - `GET /replies/{replyId}` – Get a specific reply
 
 ### 3.4 Like Service
