@@ -49,6 +49,7 @@ The PoC is structured into the following microservices:
 - `GET /coos/{cooId}` – Get a specific Coo
 - `GET /coos/user/{userId}` – Get coos from a specific user with pagination
 - `PUT /coos/{cooId}` – Update a specific Coo
+- `DELETE /coos/{cooId}` – Delete a specific Coo
 
 ### 3.3 Reply Service
 
@@ -56,21 +57,23 @@ The PoC is structured into the following microservices:
 
 - `POST /replies/cool/{cooId}` – Reply to a specific Coo
 - `POST /replies/reply/{replyId}` – Reply to a specific Reply
-- `GET /replies/cool/{cooId}` – Get replies to a specific Coo with pagination
+- `GET /replies/cool/{cooId}` – Get replies to a specific Coo and all of its replies with pagination
 - `GET /replies/{replyId}` – Get a specific reply
+- `GET /replies/reply/{replyId}` – Get replies to a specific reply with pagination
 
 ### 3.4 Like Service
 
 #### Endpoints:
-
 - `POST /likes/coo/{cooId}` – Like a specific Coo
-- `POST /likes/coo/unlike/{cooId}` – Cancel like on a specific Coo
 - `POST /likes/reply/{replyId}` – Like a specific Reply
-- `POST /likes/reply/unlike/{replyId}` – Cancel like on a specific Reply
-- `GET /likes/coo/{cooId}` – Get all likes for a specific Coo
-- `GET /likes/coo/count/{cooId}` – Get all likes count for a specific Coo
-- `GET /likes/reply/{replyId}` – Get all likes for a specific Reply
-- `GET /likes/reply/count/{replyId}` – Get all likes count for a specific Reply
+- `POST /likes/coo/{cooId}/unlike` – Cancel like on a specific Coo
+- `POST /likes/reply/{replyId}/unlike` – Cancel like on a specific Reply
+- `GET /likes/coo/{cooId}` – Get likes for a specific Coo with pagination
+- `GET /likes/reply/{replyId}` – Get likes for a specific Reply with pagination
+- `GET /likes/count/coo/{cooId}` – Get all likes count for a specific Coo
+- `GET /likes/count/reply/{replyId}` – Get all likes count for a specific Reply
+- `GET /likes/status/coo/{cooId}` – Check if a user has liked a Coo
+- `GET /likes/status/reply/{replyId}` – Check if a user has liked a Reply
 
 ### 3.5 Follow Service
 
@@ -78,9 +81,9 @@ The PoC is structured into the following microservices:
 
 - `POST /follows/follow` – Follow a user
 - `POST /follows/unfollow` – Unfollow a user
-- `GET /follows/followers/{userId}` – Get all followers of a user
+- `GET /follows/followers/{userId}` – Get all followers of a user with pagination
 - `GET /follows/count/followers/{userId}` – Get all followers count of a user
-- `GET /follows/following/{userId}` – Get all users that a user is following
+- `GET /follows/following/{userId}` – Get all users that a user is following with pagination
 - `GET /follows/count/following/{userId}` – Get all users count that a user is following
 
 ### 3.6 Search Service
@@ -143,6 +146,7 @@ classDiagram
         +uuid cooId
         +uuid replyId
         +uuid userId
+        +uuid likedToUserId
         +datetime likedAt
     }
 ```

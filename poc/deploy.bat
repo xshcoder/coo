@@ -9,3 +9,7 @@ kubectl apply -f k8s/user-service.yaml
 kubectl apply -f k8s/user-service-deployment.yaml
 kubectl apply -f k8s/coo-service.yaml
 kubectl apply -f k8s/coo-service-deployment.yaml
+kubectl apply -f k8s/reply-service.yaml
+kubectl apply -f k8s/reply-service-deployment.yaml
+kubectl apply -f k8s/like-service.yaml
+kubectl apply -f k8s/like-service-deployment.yaml

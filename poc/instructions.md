@@ -8,6 +8,8 @@ This project demonstrates how to run a PostgreSQL database and Spring Boot micro
 - `postgres/` - PostgreSQL initialization scripts and Dockerfile
 - `user-service/` - Spring Boot microservice for user management
 - `coo-service/` - Spring Boot microservice for coo management (similar to tweets)
+- `reply-service/` - Spring Boot microservice for managing replies to coos
+- `like-service/` - Spring Boot microservice for managing likes to coos or replies
 
 ## Prerequisites
 
@@ -26,6 +28,9 @@ Follow the instructions in this README to build and deploy the application.
 ### build coo service docker image
 - docker build -t coo-service:latest .
 
+### build reply service docker image
+- docker build -t reply-service:latest .
+
 ### build postgres service docker image
 - docker build -t postgres-service:latest .
 
@@ -39,6 +44,9 @@ Follow the instructions in this README to build and deploy the application.
 - http://localhost/swagger-ui/index.html
 
 ### coo service swagger url
+- http://localhost/swagger-ui/index.html
+
+### reply service swagger url
 - http://localhost/swagger-ui/index.html
 
 ### install ingress controller
@@ -62,3 +70,11 @@ http://localhost:8080/swagger-ui/index.html
 
 ### call coo service
 http://localhost/coo/api/coos
+
+### kubenetes configuration folder
+C:\Users\<you>\.kube
+C:\Users\<you>\.kube\config
+
+### init terraform
+go to terraform folder
+terraform init

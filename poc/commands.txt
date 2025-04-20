@@ -4,7 +4,7 @@ docker logs <container_name_or_id>
 docker exec -it <container_name_or_id> bash
 docker inspect <container_name_or_id>
 
-psql -U your_username -d your_database
+psql -U your_username -d your_database (psql -U coo_user -d coo_db)
 
 List all tables in the current schema:
 \dt
@@ -19,9 +19,6 @@ postgres database Port Forwarding (For Development)
 user service port forwarding
 >kubectl port-forward svc/user-service 8080:80
 http://localhost:8080/swagger-ui/index.html
-
-add new coos table to existing coo_db
-psql -U coo_user -d coo_db -f /docker-entrypoint-initdb.d/init_coos.sql
 
 ## add a table manually
 psql -U coo_user -d coo_db -f /docker-entrypoint-initdb.d/init_coos.sql

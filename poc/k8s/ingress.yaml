@@ -16,10 +16,38 @@ spec:
             name: coo-service
             port:
               number: 80
+      - path: /like(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: like-service
+            port:
+              number: 80
       - path: /user(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
             name: user-service
+            port:
+              number: 80
+      - path: /like(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: like-service
+            port:
+              number: 80
+      - path: /reply(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: reply-service
+            port:
+              number: 80
+      - path: /like(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: like-service
             port:
               number: 80
