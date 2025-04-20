@@ -74,6 +74,44 @@ resource "kubernetes_service" "like_service" {
   ]
 }
 
+resource "kubernetes_service" "follow_service" {
+  metadata {
+    name = "follow-service"
+  }
+  spec {
+    selector = {
+      app = "follow-service"
+    }
+    port {
+      port        = 80
+      target_port = 8080
+    }
+    type = "ClusterIP"
+  }
+  depends_on = [
+    kubernetes_deployment.follow_service_deployment
+  ]
+}
+
+resource "kubernetes_service" "search_service" {
+  metadata {
+    name = "search-service"
+  }
+  spec {
+    selector = {
+      app = "search-service"
+    }
+    port {
+      port        = 80
+      target_port = 8080
+    }
+    type = "ClusterIP"
+  }
+  depends_on = [
+    kubernetes_deployment.search_service_deployment
+  ]
+}
+
 resource "kubernetes_ingress_v1" "coo_ingress" {
   metadata {
     name = "coo-ingress"
@@ -122,18 +160,6 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/like(/|$)(.*)"
-          path_type = "ImplementationSpecific"
-          backend {
-            service {
-              name = kubernetes_service.like_service.metadata.0.name
-              port {
-                number = 80
-              }
-            }
-          }
-        }
-        path {
           path      = "/reply(/|$)(.*)"
           path_type = "ImplementationSpecific"
           backend {
@@ -146,11 +172,23 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/like(/|$)(.*)"
+          path      = "/follow(/|$)(.*)"
           path_type = "ImplementationSpecific"
           backend {
             service {
-              name = kubernetes_service.like_service.metadata.0.name
+              name = kubernetes_service.follow_service.metadata.0.name
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+        path {
+          path      = "/search(/|$)(.*)"
+          path_type = "ImplementationSpecific"
+          backend {
+            service {
+              name = kubernetes_service.search_service.metadata.0.name
               port {
                 number = 80
               }
@@ -163,6 +201,9 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
   depends_on = [
     kubernetes_service.coo_service,
     kubernetes_service.reply_service,
-    kubernetes_service.user_service
+    kubernetes_service.like_service,
+    kubernetes_service.user_service,
+    kubernetes_service.follow_service,
+    kubernetes_service.search_service
   ]
 }

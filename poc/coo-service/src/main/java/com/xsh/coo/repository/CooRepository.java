@@ -32,10 +32,6 @@ public class CooRepository {
         return coo;
     };
 
-    public List<Coo> findAll() {
-        return jdbcTemplate.query("SELECT * FROM coos ORDER BY created_at DESC", cooRowMapper);
-    }
-
     public Optional<Coo> findById(UUID id) {
         List<Coo> results = jdbcTemplate.query(
                 "SELECT * FROM coos WHERE id = ?",

@@ -24,8 +24,8 @@ The PoC is structured into the following microservices:
 - **Reply Service** – Handles replies to coos and retrieves replies for a specific coo.
 - **Like Service** – Manages likes and unlikes on coos.
 - **Follow Service** – Manages follow/unfollow functionality and retrieving followers/following lists.
+- **Search Service** – Allows users to search for users by handle/name or coos by content.
 - **Timeline Service** – Aggregates coos from followed users to generate the timeline for a user.
-- **Search Service** – Allows users to search for users by handle/name or coos by title/content.
 
 ---
 
@@ -35,65 +35,65 @@ The PoC is structured into the following microservices:
 
 #### Endpoints:
 
-- `POST /users/register` – Create a new user
-- `PUT /users/{userId}` – Update user profile
-- `DELETE /users/{userId}` – Delete a user
-- `GET /users/{userId}` – Get user by ID
-- `GET /users/handle/{handle}` – Get user by handle
+- `POST /api/users` – Create a new user
+- `PUT /api/users/{userId}` – Update user profile
+- `DELETE /api/users/{userId}` – Delete a user
+- `GET /api/users/{userId}` – Get user by ID
+- `GET /api/users/handle/{handle}` – Get user by handle
+- `GET /api/users` – Get paginated List of users
 
 ### 3.2 Coo Service
 
 #### Endpoints:
 
-- `POST /coos` – Post a new Coo (similar to a tweet)
-- `GET /coos/{cooId}` – Get a specific Coo
-- `GET /coos/user/{userId}` – Get coos from a specific user with pagination
-- `PUT /coos/{cooId}` – Update a specific Coo
-- `DELETE /coos/{cooId}` – Delete a specific Coo
+- `POST /api/coos` – Post a new Coo (similar to a tweet)
+- `GET /api/coos/{cooId}` – Get a specific Coo
+- `GET /api/coos/user/{userId}` – Get paginated List of coos from a specific user
+- `PUT /api/coos/{cooId}` – Update a specific Coo
+- `DELETE /api/coos/{cooId}` – Delete a specific Coo
 
 ### 3.3 Reply Service
 
 #### Endpoints:
 
-- `POST /replies/cool/{cooId}` – Reply to a specific Coo
-- `POST /replies/reply/{replyId}` – Reply to a specific Reply
-- `GET /replies/cool/{cooId}` – Get replies to a specific Coo and all of its replies with pagination
-- `GET /replies/{replyId}` – Get a specific reply
-- `GET /replies/reply/{replyId}` – Get replies to a specific reply with pagination
+- `POST /api/replies/cool/{cooId}` – Reply to a specific Coo
+- `POST /api/replies/reply/{replyId}` – Reply to a specific Reply
+- `GET /api/replies/cool/{cooId}` – Get pagenated List of replies to a specific Coo and children replies
+- `GET /api/replies/{replyId}` – Get a specific reply
+- `GET /api/replies/reply/{replyId}` – Get pagenated List of replies to a specific reply
 
 ### 3.4 Like Service
 
 #### Endpoints:
-- `POST /likes/coo/{cooId}` – Like a specific Coo
-- `POST /likes/reply/{replyId}` – Like a specific Reply
-- `POST /likes/coo/{cooId}/unlike` – Cancel like on a specific Coo
-- `POST /likes/reply/{replyId}/unlike` – Cancel like on a specific Reply
-- `GET /likes/coo/{cooId}` – Get likes for a specific Coo with pagination
-- `GET /likes/reply/{replyId}` – Get likes for a specific Reply with pagination
-- `GET /likes/count/coo/{cooId}` – Get all likes count for a specific Coo
-- `GET /likes/count/reply/{replyId}` – Get all likes count for a specific Reply
-- `GET /likes/status/coo/{cooId}` – Check if a user has liked a Coo
-- `GET /likes/status/reply/{replyId}` – Check if a user has liked a Reply
+- `POST /api/likes/coo/{cooId}` – Like a specific Coo
+- `POST /api/likes/reply/{replyId}` – Like a specific Reply
+- `POST /api/likes/coo/{cooId}/unlike` – Cancel like on a specific Coo
+- `POST /api/likes/reply/{replyId}/unlike` – Cancel like on a specific Reply
+- `GET /api/likes/coo/{cooId}` – Get paginated list of likes for a specific Coo
+- `GET /api/likes/reply/{replyId}` – Get paginated list of likes for a specific Reply
+- `GET /api/likes/count/coo/{cooId}` – Get all likes count for a specific Coo
+- `GET /api/likes/count/reply/{replyId}` – Get all likes count for a specific Reply
+- `GET /api/likes/status/coo/{cooId}` – Check if a user has liked a Coo
+- `GET /api/likes/status/reply/{replyId}` – Check if a user has liked a Reply
 
 ### 3.5 Follow Service
 
 #### Endpoints:
 
-- `POST /follows/follow` – Follow a user
-- `POST /follows/unfollow` – Unfollow a user
-- `GET /follows/followers/{userId}` – Get all followers of a user with pagination
-- `GET /follows/count/followers/{userId}` – Get all followers count of a user
-- `GET /follows/following/{userId}` – Get all users that a user is following with pagination
-- `GET /follows/count/following/{userId}` – Get all users count that a user is following
+- `POST /api/follows/{followerId}/follow/{followedId}`  - Follow a user
+- `DELETE /api/follows/{followerId}/unfollow/{followedId}` - Unfollow a user
+- `GET /api/follows/{userId}/followers` - Get paginated list of followers
+- `GET /api/follows/{userId}/following` - Get paginated list of users the user is following
+- `GET /api/follows/{userId}/followers/count` -  Get follower count
+- `GET /api/follows/{userId}/following/count` - Get following count
+- `GET /api/follows/{followerId}/is-following/{followedId}` - Check if a user is following another user
 
 ### 3.6 Search Service
 
 #### Endpoints:
 
-- `GET /search/users` – Search for users by handle or name
-    - Query parameters: `handle`, `name`
-- `GET /search/coos` – Search for coos by title or content
-    - Query parameters: `text`
+- `GET /api/search/users` – Search for users by handle or name
+- `GET /api/search/coos` – Search for coos by content
 
 ---
 
@@ -155,6 +155,7 @@ classDiagram
 ```mermaid
 classDiagram
     class Follow {
+        +uuid id
         +uuid followerId
         +uuid followedId
         +datetime followedAt
@@ -164,9 +165,23 @@ classDiagram
 ### 4.6 Search Model
 ```mermaid
 classDiagram
-    class Search {
-        +users: List<User>
-        +coos: List<Coo>
+    class User {
+        +uuid id
+        +string handle
+        +string name
+        +string email
+        +string bio
+        +datetime createdAt
+    }
+```
+
+```mermaid
+classDiagram
+    class Coo {
+        +uuid id
+        +uuid userId
+        +string content
+        +datetime createdAt
     }
 ```
 

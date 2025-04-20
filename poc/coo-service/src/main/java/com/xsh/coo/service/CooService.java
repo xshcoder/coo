@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,10 +18,6 @@ public class CooService {
 
     public CooService(CooRepository cooRepository) {
         this.cooRepository = cooRepository;
-    }
-
-    public List<Coo> getAllCoos() {
-        return cooRepository.findAll();
     }
 
     public Coo getCooById(UUID id) {

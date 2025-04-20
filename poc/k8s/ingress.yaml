@@ -23,18 +23,18 @@ spec:
             name: like-service
             port:
               number: 80
+      - path: /follow(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: follow-service
+            port:
+              number: 80
       - path: /user(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
             name: user-service
-            port:
-              number: 80
-      - path: /like(/|$)(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: like-service
             port:
               number: 80
       - path: /reply(/|$)(.*)
@@ -44,10 +44,10 @@ spec:
             name: reply-service
             port:
               number: 80
-      - path: /like(/|$)(.*)
+      - path: /search(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
-            name: like-service
+            name: search-service
             port:
               number: 80

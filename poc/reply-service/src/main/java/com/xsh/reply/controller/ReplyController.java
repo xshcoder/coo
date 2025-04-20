@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/replies")
+@RequestMapping("/api/replies")
 public class ReplyController {
     private final ReplyService replyService;
 

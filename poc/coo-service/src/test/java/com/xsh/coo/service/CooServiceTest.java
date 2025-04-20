@@ -35,20 +35,6 @@ class CooServiceTest {
     }
 
     @Test
-    void getAllCoos_ShouldReturnAllCoos() {
-        // Arrange
-        List<Coo> expectedCoos = Arrays.asList(new Coo(), new Coo());
-        when(cooRepository.findAll()).thenReturn(expectedCoos);
-
-        // Act
-        List<Coo> actualCoos = cooService.getAllCoos();
-
-        // Assert
-        assertEquals(expectedCoos, actualCoos);
-        verify(cooRepository).findAll();
-    }
-
-    @Test
     void getCooById_WhenCooExists_ShouldReturnCoo() {
         // Arrange
         UUID id = UUID.randomUUID();

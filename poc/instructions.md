@@ -10,6 +10,8 @@ This project demonstrates how to run a PostgreSQL database and Spring Boot micro
 - `coo-service/` - Spring Boot microservice for coo management (similar to tweets)
 - `reply-service/` - Spring Boot microservice for managing replies to coos
 - `like-service/` - Spring Boot microservice for managing likes to coos or replies
+- `follow-service/` - Spring Boot microservice for managing user follows
+- `search-service/` - Spring Boot microservice for searching users and coos
 
 ## Prerequisites
 
@@ -34,6 +36,12 @@ Follow the instructions in this README to build and deploy the application.
 ### build postgres service docker image
 - docker build -t postgres-service:latest .
 
+### build follow service docker image
+- docker build -t follow-service:latest .
+
+### build search service docker image
+- docker build -t search-service:latest .
+
 ### deploy postgres service & user service
 - deploy.bat
 
@@ -47,6 +55,12 @@ Follow the instructions in this README to build and deploy the application.
 - http://localhost/swagger-ui/index.html
 
 ### reply service swagger url
+- http://localhost/swagger-ui/index.html
+
+### follow service swagger url
+- http://localhost/swagger-ui/index.html
+
+### search service swagger url
 - http://localhost/swagger-ui/index.html
 
 ### install ingress controller

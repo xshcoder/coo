@@ -138,6 +138,74 @@ resource "kubernetes_deployment" "coo_service_deployment" {
   ]
 }
 
+resource "kubernetes_deployment" "follow_service_deployment" {
+  metadata {
+    name = "follow-service"
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "follow-service"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "follow-service"
+        }
+      }
+      spec {
+        container {
+          name  = "follow-service"
+          image = "follow-service:latest"
+          image_pull_policy = "Never"
+
+          port {
+            container_port = 8080
+          }
+
+          env {
+            name  = "SPRING_DATASOURCE_URL"
+            value = "jdbc:postgresql://postgres-service:5432/coo_db"
+          }
+          env {
+            name = "SPRING_DATASOURCE_USERNAME"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.db_credentials.metadata.0.name
+                key  = "SPRING_DATASOURCE_USERNAME"
+              }
+            }
+          }
+          env {
+            name = "SPRING_DATASOURCE_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.db_credentials.metadata.0.name
+                key  = "SPRING_DATASOURCE_PASSWORD"
+              }
+            }
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/actuator/health"
+              port = 8080
+            }
+            initial_delay_seconds = 30
+            period_seconds      = 10
+          }
+        }
+      }
+    }
+  }
+  depends_on = [
+    kubernetes_deployment.postgres_deployment,
+    kubernetes_secret.db_credentials
+  ]
+}
+
 resource "kubernetes_deployment" "reply_service_deployment" {
   metadata {
     name = "reply-service"
@@ -337,8 +405,75 @@ resource "kubernetes_deployment" "like_service_deployment" {
     }
   }
   depends_on = [
-    kubernetes_persistent_volume_claim.postgres_pvc,
-    kubernetes_service.postgres_service,
+    kubernetes_service.postgres_deployment,
+    kubernetes_secret.db_credentials
+  ]
+}
+
+resource "kubernetes_deployment" "search_service_deployment" {
+  metadata {
+    name = "search-service"
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "search-service"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "search-service"
+        }
+      }
+      spec {
+        container {
+          name  = "search-service"
+          image = "search-service:latest"
+          image_pull_policy = "Never"
+
+          port {
+            container_port = 8080
+          }
+
+          env {
+            name  = "SPRING_DATASOURCE_URL"
+            value = "jdbc:postgresql://postgres-service:5432/coo_db"
+          }
+          env {
+            name = "SPRING_DATASOURCE_USERNAME"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.db_credentials.metadata.0.name
+                key  = "SPRING_DATASOURCE_USERNAME"
+              }
+            }
+          }
+          env {
+            name = "SPRING_DATASOURCE_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.db_credentials.metadata.0.name
+                key  = "SPRING_DATASOURCE_PASSWORD"
+              }
+            }
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/actuator/health"
+              port = 8080
+            }
+            initial_delay_seconds = 30
+            period_seconds      = 10
+          }
+        }
+      }
+    }
+  }
+  depends_on = [
+    kubernetes_service.postgres_deployment,
     kubernetes_secret.db_credentials
   ]
 }
