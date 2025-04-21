@@ -10,8 +10,8 @@ The system allows users to:
 - **Reply** to a **Coo**
 - **Like** a **Coo**
 - **Follow** other users
-- Display a timeline of following **User**s' **Coo**s
 - **Search** for users or coos based on specific criteria
+- Display a timeline of following **User**s' **Coo**s, replies to user's own **Coo**s, and replies to following **User**s' **Coo**s.
 
 ---
 
@@ -25,7 +25,7 @@ The PoC is structured into the following microservices:
 - **Like Service** – Manages likes and unlikes on coos.
 - **Follow Service** – Manages follow/unfollow functionality and retrieving followers/following lists.
 - **Search Service** – Allows users to search for users by handle/name or coos by content.
-- **Timeline Service** – Aggregates coos from followed users to generate the timeline for a user.
+- **Personalize Service** – Provide personalized content based on user preferences.
 
 ---
 
@@ -92,8 +92,11 @@ The PoC is structured into the following microservices:
 
 #### Endpoints:
 
-- `GET /api/search/users` – Search for users by handle or name
-- `GET /api/search/coos` – Search for coos by content
+- `GET /api/search/users` – Search paginated list of users by handle or name
+- `GET /api/search/coos` – Search paginated list of coos by content
+
+### 3.7 Personalize Service
+- `GET /api/personalize/timeline` – Get a time cursor-based list of coos or replies tailored to user preferences
 
 ---
 
@@ -182,6 +185,35 @@ classDiagram
         +uuid userId
         +string content
         +datetime createdAt
+    }
+```
+### 4.6 Personalize Model
+```mermaid
+classDiagram
+    class TimelineActivity {
+        +uuid id
+        +uuid cooId
+        +uuid userId
+        +string userHandle
+        +string content
+        +datetime createdAt
+        +uuid repliedToUserId
+        +string repliedToUserHandle
+        +uuid repliedToReplyId
+    }
+```
+```mermaid
+classDiagram
+    class TimelineCursor {
+        +uuid id
+        +uuid cooId
+        +uuid userId
+        +string userHandle
+        +string content
+        +datetime createdAt
+        +uuid repliedToUserId
+        +string repliedToUserHandle
+        +uuid repliedToReplyId
     }
 ```
 

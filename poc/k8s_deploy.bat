@@ -17,3 +17,5 @@ kubectl apply -f k8s/follow-service.yaml
 kubectl apply -f k8s/follow-service-deployment.yaml
 kubectl apply -f k8s/search-service.yaml
 kubectl apply -f k8s/search-service-deployment.yaml
+kubectl apply -f k8s/personalize-service.yaml
+kubectl apply -f k8s/personalize-service-deployment.yaml

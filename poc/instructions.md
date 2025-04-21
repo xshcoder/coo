@@ -42,6 +42,9 @@ Follow the instructions in this README to build and deploy the application.
 ### build search service docker image
 - docker build -t search-service:latest .
 
+### build personalize service docker image
+- docker build -t personalize-service:latest .
+
 ### deploy postgres service & user service
 - deploy.bat
 
@@ -62,6 +65,9 @@ Follow the instructions in this README to build and deploy the application.
 
 ### search service swagger url
 - http://localhost/swagger-ui/index.html
+
+### personalize service swagger url
+- http://localhost/personalize/swagger-ui/index.html
 
 ### install ingress controller
 - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml

@@ -477,3 +477,71 @@ resource "kubernetes_deployment" "search_service_deployment" {
     kubernetes_secret.db_credentials
   ]
 }
+
+resource "kubernetes_deployment" "personalize_service_deployment" {
+  metadata {
+    name = "personalize-service"
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "personalize-service"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "personalize-service"
+        }
+      }
+      spec {
+        container {
+          name  = "personalize-service"
+          image = "personalize-service:latest"
+          image_pull_policy = "Never"
+
+          port {
+            container_port = 8080
+          }
+
+          env {
+            name  = "SPRING_DATASOURCE_URL"
+            value = "jdbc:postgresql://postgres-service:5432/coo_db"
+          }
+          env {
+            name = "SPRING_DATASOURCE_USERNAME"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.db_credentials.metadata.0.name
+                key  = "SPRING_DATASOURCE_USERNAME"
+              }
+            }
+          }
+          env {
+            name = "SPRING_DATASOURCE_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.db_credentials.metadata.0.name
+                key  = "SPRING_DATASOURCE_PASSWORD"
+              }
+            }
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/actuator/health"
+              port = 8080
+            }
+            initial_delay_seconds = 30
+            period_seconds      = 10
+          }
+        }
+      }
+    }
+  }
+  depends_on = [
+    kubernetes_service.postgres_deployment,
+    kubernetes_secret.db_credentials
+  ]
+}

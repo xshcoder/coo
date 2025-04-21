@@ -51,3 +51,10 @@ spec:
             name: search-service
             port:
               number: 80
+      - path: /personalize(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: personalize-service
+            port:
+              number: 80
