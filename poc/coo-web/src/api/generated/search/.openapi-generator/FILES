@@ -1,0 +1,12 @@
+.openapi-generator-ignore
+apis/SearchControllerApi.ts
+apis/index.ts
+index.ts
+models/Coo.ts
+models/PageCoo.ts
+models/PageUser.ts
+models/PageableObject.ts
+models/SortObject.ts
+models/User.ts
+models/index.ts
+runtime.ts

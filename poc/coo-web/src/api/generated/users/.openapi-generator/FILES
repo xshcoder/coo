@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/UserControllerApi.ts
+apis/index.ts
+index.ts
+models/PageUser.ts
+models/PageableObject.ts
+models/SortObject.ts
+models/User.ts
+models/index.ts
+runtime.ts

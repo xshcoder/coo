@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  coo-web:
+    build:
+      context: .          # 👈 current directory
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080 # 👈 API URL, actually not useful, as it will be proxied
+    restart: no

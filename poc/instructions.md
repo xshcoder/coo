@@ -89,7 +89,7 @@ Follow the instructions in this README to build and deploy the application.
 http://localhost:8080/swagger-ui/index.html
 
 ### call coo service
-http://localhost/coo/api/coos
+http://localhost/api/coos
 
 ### kubenetes configuration folder
 C:\Users\<you>\.kube

@@ -56,3 +56,9 @@ server.servlet.context-path=/user
 
 springdoc.swagger-ui.url=/user/v3/api-docs
 springdoc.swagger-ui.queryConfigEnabled=true
+
+## getUsers api url
+http://localhost/api/users?page=0&size=10
+
+## run docker compose
+- docker compose up --build -d

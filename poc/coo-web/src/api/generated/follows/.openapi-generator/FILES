@@ -1,0 +1,11 @@
+.openapi-generator-ignore
+apis/FollowControllerApi.ts
+apis/index.ts
+index.ts
+models/Follow.ts
+models/PageFollow.ts
+models/Pageable.ts
+models/PageableObject.ts
+models/SortObject.ts
+models/index.ts
+runtime.ts

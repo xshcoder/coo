@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/LikeControllerApi.ts
+apis/index.ts
+index.ts
+models/Like.ts
+models/PageLike.ts
+models/PageableObject.ts
+models/SortObject.ts
+models/index.ts
+runtime.ts

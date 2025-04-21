@@ -2,57 +2,55 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: coo-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /coo(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /api/coos
+        pathType: Prefix
         backend:
           service:
             name: coo-service
             port:
               number: 80
-      - path: /like(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /api/likes
+        pathType: Prefix
         backend:
           service:
             name: like-service
             port:
               number: 80
-      - path: /follow(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /api/follows
+        pathType: Prefix
         backend:
           service:
             name: follow-service
             port:
               number: 80
-      - path: /user(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /api/users
+        pathType: Prefix
         backend:
           service:
             name: user-service
             port:
               number: 80
-      - path: /reply(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /api/replies
+        pathType: Prefix
         backend:
           service:
             name: reply-service
             port:
               number: 80
-      - path: /search(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /api/search
+        pathType: Prefix
         backend:
           service:
             name: search-service
             port:
               number: 80
-      - path: /personalize(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /api/personalize
+        pathType: Prefix
         backend:
           service:
             name: personalize-service

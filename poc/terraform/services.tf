@@ -134,17 +134,14 @@ resource "kubernetes_service" "personalize_service" {
 resource "kubernetes_ingress_v1" "coo_ingress" {
   metadata {
     name = "coo-ingress"
-    annotations = {
-      "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
-    }
   }
   spec {
     ingress_class_name = "nginx" # Make sure you have an Ingress controller like Nginx installed
     rule {
       http {
         path {
-          path      = "/coo(/|$)(.*)"
-          path_type = "ImplementationSpecific"
+          path      = "/api/coos"
+          path_type = "Prefix"
           backend {
             service {
               name = kubernetes_service.coo_service.metadata.0.name
@@ -155,8 +152,8 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/like(/|$)(.*)"
-          path_type = "ImplementationSpecific"
+          path      = "/api/likes"
+          path_type = "Prefix"
           backend {
             service {
               name = kubernetes_service.like_service.metadata.0.name
@@ -167,8 +164,8 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/user(/|$)(.*)"
-          path_type = "ImplementationSpecific"
+          path      = "/api/users"
+          path_type = "Prefix"
           backend {
             service {
               name = kubernetes_service.user_service.metadata.0.name
@@ -179,8 +176,8 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/reply(/|$)(.*)"
-          path_type = "ImplementationSpecific"
+          path      = "/api/replies"
+          path_type = "Prefix"
           backend {
             service {
               name = kubernetes_service.reply_service.metadata.0.name
@@ -191,8 +188,8 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/follow(/|$)(.*)"
-          path_type = "ImplementationSpecific"
+          path      = "/api/follows"
+          path_type = "Prefix"
           backend {
             service {
               name = kubernetes_service.follow_service.metadata.0.name
@@ -203,8 +200,8 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/search(/|$)(.*)"
-          path_type = "ImplementationSpecific"
+          path      = "/api/search"
+          path_type = "Prefix"
           backend {
             service {
               name = kubernetes_service.search_service.metadata.0.name
@@ -215,8 +212,8 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
           }
         }
         path {
-          path      = "/personalize(/|$)(.*)"
-          path_type = "ImplementationSpecific"
+          path      = "/api/personalize"
+          path_type = "Prefix"
           backend {
             service {
               name = kubernetes_service.personalize_service.metadata.0.name

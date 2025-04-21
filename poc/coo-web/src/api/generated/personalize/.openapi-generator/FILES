@@ -1,0 +1,8 @@
+.openapi-generator-ignore
+apis/PersonalizeControllerApi.ts
+apis/index.ts
+index.ts
+models/TimelineActivity.ts
+models/TimelineCursor.ts
+models/index.ts
+runtime.ts

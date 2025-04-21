@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/ReplyControllerApi.ts
+apis/index.ts
+index.ts
+models/PageReply.ts
+models/PageableObject.ts
+models/Reply.ts
+models/SortObject.ts
+models/index.ts
+runtime.ts
