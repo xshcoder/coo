@@ -59,4 +59,12 @@ public class ReplyController {
         Page<Reply> replies = replyService.getRepliesForReply(replyId, PageRequest.of(page, size));
         return ResponseEntity.ok(replies);
     }
+    
+    @DeleteMapping("/{replyId}")
+    public ResponseEntity<Void> deleteReply(
+            @PathVariable UUID replyId,
+            @RequestParam UUID userId) {
+        replyService.deleteReply(replyId, userId);
+        return ResponseEntity.noContent().build();
+    }
 }

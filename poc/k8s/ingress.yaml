@@ -56,3 +56,10 @@ spec:
             name: personalize-service
             port:
               number: 80
+      - path: /api/statistics
+        pathType: Prefix
+        backend:
+          service:
+            name: statistics-service
+            port:
+              number: 80

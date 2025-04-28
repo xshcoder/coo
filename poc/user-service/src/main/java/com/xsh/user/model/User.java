@@ -9,6 +9,7 @@ public class User {
     private String name;
     private String email;
     private String bio;
+    private String logo;
     private OffsetDateTime createdAt;
 
     public User() {
@@ -61,6 +62,14 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public OffsetDateTime getCreatedAt() {

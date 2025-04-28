@@ -1,0 +1,8 @@
+@use "../../../assets/styles/design";
+
+.side-content {
+  // Basic styling for the side content area
+  padding: design.$spacing-m;
+  height: 100%; // Adjust as needed
+  box-sizing: border-box;
+}

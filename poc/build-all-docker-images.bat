@@ -39,5 +39,10 @@ cd personalize
 call docker build -t personalize-service:latest .
 cd ..
 
+echo Building statistics-service...
+cd statistics
+call docker build -t statistics-service:latest .
+cd ..
+
 echo All images built successfully!
 pause

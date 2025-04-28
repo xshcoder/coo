@@ -34,5 +34,10 @@ cd personalize-service
 call mvn clean
 cd ..
 
+echo Cleaning statistics-service...
+cd statistics-service
+call mvn clean
+cd ..
+
 echo All services cleaned!
 pause

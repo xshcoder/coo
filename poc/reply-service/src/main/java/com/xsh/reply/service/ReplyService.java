@@ -51,4 +51,15 @@ public class ReplyService {
     public Page<Reply> getRepliesForReply(UUID replyId, Pageable pageable) {
         return replyRepository.findByRepliedToReplyIdOrderByCreatedAtDesc(replyId, pageable);
     }
+    
+    public void deleteReply(UUID replyId, UUID userId) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reply not found with id: " + replyId));
+        
+        if (!reply.getUserId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User is not authorized to delete this reply");
+        }
+        
+        replyRepository.deleteById(replyId);
+    }
 }

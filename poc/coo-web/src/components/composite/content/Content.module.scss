@@ -1,0 +1,37 @@
+@use "../../../assets/styles/design";
+
+.content {
+    max-width: 1008px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: flex;
+    // align-items: start; // Keep side content aligned to the top initially
+    padding: design.$spacing-m; // Adjusted padding for consistency
+    gap: design.$spacing-m; // Add space between flex items
+    // Ensure this container has enough height for sticky positioning to work,
+    // This might depend on the parent component's layout (e.g., App.tsx)
+    // For example: min-height: calc(100vh - <height_of_topnav>);
+}
+
+.main-content { // Renamed from main-area for clarity if needed
+    flex: 1; // Takes remaining space
+    display: flex;
+    flex-direction: column;
+    gap: design.$spacing-m; // Use design token
+    min-width: 0; // Prevent flex overflow issues
+    // No overflow here, let the browser handle scrolling for the page
+}
+
+.side-content { // Renamed from side-area for clarity if needed
+    flex: 0 0 360px; // Fixed width for sidebar
+    display: flex;
+    flex-direction: column;
+    gap: design.$spacing-m; // Use design token
+    position: sticky; // Make the sidebar sticky
+    top: design.$spacing-m; // Position relative to the top padding
+    align-self: start; // Prevent stretching vertically
+    // Ensure the sticky element doesn't exceed viewport height minus top offset
+    max-height: calc(100vh - 2 * design.$spacing-m);
+    overflow-y: auto; // Allow scrolling within the sidebar if its content exceeds max-height
+}

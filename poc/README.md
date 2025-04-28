@@ -26,6 +26,7 @@ The PoC is structured into the following microservices:
 - **Follow Service** – Manages follow/unfollow functionality and retrieving followers/following lists.
 - **Search Service** – Allows users to search for users by handle/name or coos by content.
 - **Personalize Service** – Provide personalized content based on user preferences.
+- **Statistics Service** – Provides statistics about replies, likes and views counts of coo or reply
 
 ---
 
@@ -41,6 +42,7 @@ The PoC is structured into the following microservices:
 - `GET /api/users/{userId}` – Get user by ID
 - `GET /api/users/handle/{handle}` – Get user by handle
 - `GET /api/users` – Get paginated List of users
+- `POST /api/users/ids` – Get a  List of users by userIds
 
 ### 3.2 Coo Service
 
@@ -61,6 +63,7 @@ The PoC is structured into the following microservices:
 - `GET /api/replies/cool/{cooId}` – Get pagenated List of replies to a specific Coo and children replies
 - `GET /api/replies/{replyId}` – Get a specific reply
 - `GET /api/replies/reply/{replyId}` – Get pagenated List of replies to a specific reply
+- `DELETE /api/replies/{replyId}` – Delete a specific reply
 
 ### 3.4 Like Service
 
@@ -96,8 +99,19 @@ The PoC is structured into the following microservices:
 - `GET /api/search/coos` – Search paginated list of coos by content
 
 ### 3.7 Personalize Service
+
+#### Endpoints:
 - `GET /api/personalize/timeline` – Get a time cursor-based list of coos or replies tailored to user preferences
 
+### 3.8 Statistics Service
+
+#### Endpoints:
+- `GET /api/statistics/coo/{cooId}` – Get statistics of a coo
+- `POST /api/statistics/coo/{cooId}` – Create/update statistics of a coo
+- `POST /api/statistics/coos` – Get statistics of multiple coos by cooIds
+- `GET /api/statistics/reply` – Get statistics of a reply
+- `POST /api/statistics/reply/{replyId}` – Create/update statistics of a reply
+- `POST /api/statistics/replies` – Get statistics of multiple replies by replyIds
 ---
 
 ## 4. Data Model
@@ -214,6 +228,26 @@ classDiagram
         +uuid repliedToUserId
         +string repliedToUserHandle
         +uuid repliedToReplyId
+    }
+```
+### 4.6 Statstics Model
+```mermaid
+classDiagram
+    class Statistics {
+        +uuid id
+        +uuid subjectId
+        +StatisticsSubjectType subjectType
+        +integer repliesCount
+        +integer likesCount
+        +integer viewsCount
+        +datetime updateddAt
+    }
+```
+```mermaid
+classDiagram
+    class StatisticsSubjectType {
+        COO,
+        REPLY
     }
 ```
 

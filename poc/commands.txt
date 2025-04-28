@@ -16,8 +16,16 @@ quit
 postgres database Port Forwarding (For Development)
 >kubectl port-forward svc/postgres-service 5432:5432
 
-user service port forwarding
+service port forwarding
 >kubectl port-forward svc/user-service 8080:80
+>kubectl port-forward svc/coo-service 8080:80
+>kubectl port-forward svc/follow-service 8080:80
+>kubectl port-forward svc/reply-service 8080:80
+>kubectl port-forward svc/like-service 8080:80
+>kubectl port-forward svc/search-service 8080:80
+>kubectl port-forward svc/personalize-service 8080:80
+>kubectl port-forward svc/statistics-service 8080:80
+
 http://localhost:8080/swagger-ui/index.html
 
 ## add a table manually

@@ -10,6 +10,8 @@ import com.xsh.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -56,5 +58,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         userRepository.deleteById(id);
+    }
+
+    public List<User> getUsersByIds(List<UUID> ids) {
+        return userRepository.findByIds(ids);
     }
 }

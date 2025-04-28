@@ -1,0 +1,36 @@
+@use "../../../assets/styles/design"; // Adjust path if necessary
+
+.top-navigation {
+    width: 100%; // Take full width available
+    max-width: 1008px; // Max content width
+    margin: 0 auto; // Center the container if viewport is wider
+    display: flex;
+    justify-content: space-between; // Pushes items apart
+    align-items: center; // Vertically align items
+    padding: design.$spacing-sm design.$spacing-m; // Use design tokens for padding
+    box-sizing: border-box;
+    gap: design.$spacing-m; // Add space between flex items
+    border-bottom: 1px solid design.$color-black-300; // Add separator line
+    height: 80px; // Adjust height as needed;
+
+    .logo {
+        margin-left: 10px;
+        flex-shrink: 0; // Prevent logo from shrinking
+        // Add specific width if needed, e.g., width: 100px;
+        display: flex; // Helps align the image if needed
+        align-items: center;
+    }
+
+    .search {
+        flex-grow: 1; // Allow search area to take available space
+        max-width: 600px; // Set max width for search area
+        min-width: 150px; // Optional: prevent it from becoming too small
+    }
+
+    .login {
+        flex-shrink: 0; // Prevent login button area from shrinking
+        // Add specific width if needed, e.g., width: 120px;
+        display: flex; // Helps align the button if needed
+        justify-content: flex-end;
+    }
+}

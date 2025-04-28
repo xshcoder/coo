@@ -1,16 +1,9 @@
 import { FC } from 'react';
-import Login from './components/Login';
-import UserList from './components/UserList';
-
-import './styles/variables.scss';
-import './styles/login.scss';
+import Home from './pages/home/Home';
 
 const App: FC = () => {
   return (
-    <div>
-      <Login />
-      <UserList />
-    </div>
+    <Home></Home>
   );
 };
 

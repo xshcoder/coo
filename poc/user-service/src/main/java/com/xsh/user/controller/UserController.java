@@ -8,6 +8,8 @@ import com.xsh.user.model.User;
 import com.xsh.user.service.UserService;
 
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -50,5 +52,10 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/ids")
+    public ResponseEntity<List<User>> getUsersByIds(@RequestBody List<UUID> userIds) {
+        return ResponseEntity.ok(userService.getUsersByIds(userIds));
     }
 }

@@ -1,0 +1,41 @@
+@use "../../../assets/styles/design"; // Adjust path if necessary
+
+.whoToFollow {
+  // Basic styling for the Who to Follow container
+  background-color: design.$color-black-50; // Example background
+  border-radius: design.$border-radius-m;
+  padding: design.$spacing-m 0 design.$spacing-m 0;
+  margin-bottom: design.$spacing-m; // Space below the component
+
+  h3 {
+    font-size: design.$fontsize-l;
+    font-weight: 600;
+    color: design.$color-black-900;
+    margin-top: 0;
+    margin-bottom: design.$spacing-m;
+    border-bottom: 1px solid design.$color-black-200; // Separator line
+    padding-bottom: design.$spacing-sm;
+    padding-left: design.$spacing-m;
+    padding-right: design.$spacing-m;
+  }
+
+  // Add styles for the list container if needed
+  .suggestionList {
+    display: flex;
+    flex-direction: column;
+    // gap: design.$spacing-xs; // Add gap if padding in FollowSuggestion is removed
+  }
+
+  // Optional: Styles for a "Show more" link
+  .showMore {
+    display: block;
+    padding-top: design.$spacing-sm;
+    color: design.$color-main-500;
+    text-decoration: none;
+    font-size: design.$fontsize-sm;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

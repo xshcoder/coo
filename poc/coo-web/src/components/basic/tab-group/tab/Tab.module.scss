@@ -1,0 +1,33 @@
+@use "../../../../assets/styles/design"; // Adjust path relative to this file
+
+.tab {
+  padding: design.$spacing-sm design.$spacing-m;
+  cursor: pointer;
+  border: none; // Remove default button border
+  border-bottom: 3px solid transparent; // Placeholder for selected indicator
+  background-color: transparent; // Ensure no background by default
+  font-size: design.$fontsize-m;
+  font-weight: 500;
+  color: design.$color-black-700; // Color for unselected tabs
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease; // Add background-color transition
+  margin-right: design.$spacing-sm; // Space between tabs
+  border-radius: design.$border-radius-sm design.$border-radius-sm 0 0; // Rounded corners for the tab buttons;
+
+  // Add hover effect for non-selected tabs
+  &:hover {
+    color: design.$color-black-900; // Darken text slightly
+    background-color: design.$color-black-100; // Add light background highlight
+  }
+
+  &:focus {
+    outline: none; // Remove default focus outline
+    // Optional: Add a subtle focus ring if needed for accessibility
+    // box-shadow: 0 0 0 2px design.$color-main-200;
+  }
+}
+
+.tab-selected {
+  color: design.$color-main-500; // Color for the selected tab
+  border-bottom-color: design.$color-main-500; // Highlight selected tab with border
+  font-weight: 600;
+}

@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/UserControllerApi.ts
 apis/index.ts
 index.ts

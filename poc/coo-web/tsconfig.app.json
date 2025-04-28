@@ -20,7 +20,19 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Import Alias */
+    "baseUrl": "./src", // This is crucial! Paths are resolved relative to this directory.
+    "paths": {
+      "@/*": ["*"]
+    }
   },
-  "include": ["src"]
+  "include": [
+    "src/**/*" // Ensure your source files are included
+  ],
+  "exclude": [
+    "node_modules",
+    "dist" // Or your output directory
+  ]
 }

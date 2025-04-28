@@ -46,6 +46,10 @@ export interface GetUsersRequest {
     size?: number;
 }
 
+export interface GetUsersByIdsRequest {
+    requestBody: Array<string>;
+}
+
 export interface UpdateUserRequest {
     id: string;
     user: User;
@@ -211,6 +215,40 @@ export class UserControllerApi extends runtime.BaseAPI {
      */
     async getUsers(requestParameters: GetUsersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageUser> {
         const response = await this.getUsersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getUsersByIdsRaw(requestParameters: GetUsersByIdsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<User>>> {
+        if (requestParameters['requestBody'] == null) {
+            throw new runtime.RequiredError(
+                'requestBody',
+                'Required parameter "requestBody" was null or undefined when calling getUsersByIds().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/users/ids`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['requestBody'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserFromJSON));
+    }
+
+    /**
+     */
+    async getUsersByIds(requestParameters: GetUsersByIdsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<User>> {
+        const response = await this.getUsersByIdsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

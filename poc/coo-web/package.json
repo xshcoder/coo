@@ -15,6 +15,7 @@
     "generate-likes-api": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-fetch -o ./src/api/generated/likes",
     "generate-search-api": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-fetch -o ./src/api/generated/search",
     "generate-personalize-api": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-fetch -o ./src/api/generated/personalize",
+    "generate-statistics-api": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-fetch -o ./src/api/generated/statistics",
     "fix-generated-api": "eslint ./src/api/generated/**/*.ts --fix"
   },
   "dependencies": {

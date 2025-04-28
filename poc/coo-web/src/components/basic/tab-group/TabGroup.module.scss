@@ -1,0 +1,15 @@
+@use "../../../assets/styles/design";
+
+.tab-group {
+  width: 100%;
+}
+
+.tab-list {
+  display: flex; // Align tabs horizontally
+  justify-content: center; // Center tabs;
+  gap: design.$spacing-l; // Space between tabs
+}
+
+.tab-content {
+  padding: design.$spacing-m 0; // Add some padding to the content area
+}

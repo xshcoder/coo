@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xsh.reply.model.Reply;
 
@@ -82,6 +83,7 @@ public class ReplyRepository {
         return new PageImpl<>(content, pageable, total);
     }
 
+    @Transactional
     public Reply save(Reply reply) {
         if (reply.getId() == null) {
             // Insert new reply
@@ -96,6 +98,26 @@ public class ReplyRepository {
                     reply.getRepliedToReplyId()
             );
             reply.setId(id);
+            
+            // Update statistics - increment replies_count
+            if (reply.getRepliedToReplyId() != null) {
+                // This is a reply to another reply
+                jdbcTemplate.update(
+                        "INSERT INTO statistics (id, subject_id, subject_type, replies_count) VALUES (?, ?, 'REPLY', 1) " +
+                        "ON CONFLICT (subject_id, subject_type) DO UPDATE SET replies_count = statistics.replies_count + 1",
+                        UUID.randomUUID(), // Generate a new ID for the statistics row, since we don't have one for the CO
+                        reply.getRepliedToReplyId()
+                );
+            } else {
+                // This is a reply to a coo
+                jdbcTemplate.update(
+                        "INSERT INTO statistics (id, subject_id, subject_type, replies_count) VALUES (?, ?, 'COO', 1) " +
+                        "ON CONFLICT (subject_id, subject_type) DO UPDATE SET replies_count = statistics.replies_count + 1",
+                        UUID.randomUUID(), // Generate a new ID for the statistics row, since we don't have one for the CO
+                        reply.getCooId()
+                );
+            }
+            
             return findById(id).orElseThrow();
         } else {
             // Update existing reply
@@ -105,6 +127,38 @@ public class ReplyRepository {
                     reply.getId()
             );
             return findById(reply.getId()).orElseThrow();
+        }
+    }
+    
+    @Transactional
+    public void deleteById(UUID id) {
+        // Get the reply before deleting to know what statistics to update
+        Optional<Reply> replyOptional = findById(id);
+        if (replyOptional.isPresent()) {
+            Reply reply = replyOptional.get();
+            
+            // Delete the reply
+            jdbcTemplate.update("DELETE FROM replies WHERE id = ?", id);
+            
+            // Update statistics - decrement replies_count
+            if (reply.getRepliedToReplyId() != null) {
+                // This was a reply to another reply
+                jdbcTemplate.update(
+                        "UPDATE statistics SET replies_count = replies_count - 1 " +
+                        "WHERE subject_id = ? AND subject_type = 'REPLY' AND replies_count > 0",
+                        reply.getRepliedToReplyId()
+                );
+            } else {
+                // This was a reply to a coo
+                jdbcTemplate.update(
+                        "UPDATE statistics SET replies_count = replies_count - 1 " +
+                        "WHERE subject_id = ? AND subject_type = 'COO' AND replies_count > 0",
+                        reply.getCooId()
+                );
+            }
+        } else {
+            // If reply doesn't exist, just try to delete anyway
+            jdbcTemplate.update("DELETE FROM replies WHERE id = ?", id);
         }
     }
 }

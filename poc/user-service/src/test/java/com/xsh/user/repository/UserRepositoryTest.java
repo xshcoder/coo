@@ -12,6 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,16 +42,16 @@ class UserRepositoryTest {
 
         // Insert test users
         jdbcTemplate.update(
-            "INSERT INTO users (id, handle, name, email, bio) VALUES (?, ?, ?, ?, ?)",
-            TEST_USER_ID, TEST_USER_HANDLE, "Test User 1", "test1@example.com", "Bio for test user 1"
+            "INSERT INTO users (id, handle, name, email, bio, logo) VALUES (?, ?, ?, ?, ?, ?)",
+            TEST_USER_ID, TEST_USER_HANDLE, "Test User 1", "test1@example.com", "Bio for test user 1", "logo1.png"
         );
         jdbcTemplate.update(
-            "INSERT INTO users (id, handle, name, email, bio) VALUES (?, ?, ?, ?, ?)",
-            UUID.fromString("223e4567-e89b-12d3-a456-426614174000"), "testuser2", "Test User 2", "test2@example.com", "Bio for test user 2"
+            "INSERT INTO users (id, handle, name, email, bio, logo) VALUES (?, ?, ?, ?, ?, ?)",
+            UUID.fromString("223e4567-e89b-12d3-a456-426614174000"), "testuser2", "Test User 2", "test2@example.com", "Bio for test user 2", "logo2.png"
         );
         jdbcTemplate.update(
-            "INSERT INTO users (id, handle, name, email, bio) VALUES (?, ?, ?, ?, ?)",
-            UUID.fromString("323e4567-e89b-12d3-a456-426614174000"), "testuser3", "Test User 3", "test3@example.com", "Bio for test user 3"
+            "INSERT INTO users (id, handle, name, email, bio, logo) VALUES (?, ?, ?, ?, ?, ?)",
+            UUID.fromString("323e4567-e89b-12d3-a456-426614174000"), "testuser3", "Test User 3", "test3@example.com", "Bio for test user 3", "logo3.png"
         );
     }
 
@@ -143,5 +146,31 @@ class UserRepositoryTest {
         // Assert
         Optional<User> deletedUser = userRepository.findById(TEST_USER_ID);
         assertTrue(deletedUser.isEmpty());
+    }
+
+    @Test
+    void findByIds_ShouldReturnMatchingUsers() {
+        // Arrange
+        List<UUID> ids = Arrays.asList(
+            TEST_USER_ID,
+            UUID.fromString("223e4567-e89b-12d3-a456-426614174000")
+        );
+        
+        // Act
+        List<User> users = userRepository.findByIds(ids);
+        
+        // Assert
+        assertEquals(2, users.size());
+        assertTrue(users.stream().anyMatch(u -> u.getId().equals(TEST_USER_ID)));
+        assertTrue(users.stream().anyMatch(u -> u.getId().equals(UUID.fromString("223e4567-e89b-12d3-a456-426614174000"))));
+    }
+
+    @Test
+    void findByIds_WithEmptyList_ShouldReturnEmptyList() {
+        // Act
+        List<User> users = userRepository.findByIds(Collections.emptyList());
+        
+        // Assert
+        assertTrue(users.isEmpty());
     }
 }

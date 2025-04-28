@@ -1,0 +1,38 @@
+@use "../../../assets/styles/design"; // Adjust path if necessary
+
+.button {
+  // Base button styles (secondary/default)
+  padding: design.$spacing-sm design.$spacing-m;
+  border: 1px solid design.$color-black-400;
+  border-radius: design.$border-radius-m;
+  cursor: pointer;
+  font-size: design.$fontsize-m;
+  background-color: design.$color-white; // Example secondary background
+  color: design.$color-black-900; // Example secondary text color
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: design.$color-black-500; // Example hover for secondary
+  }
+}
+
+.button-primary {
+  // Primary button styles
+  background-color: design.$color-main-500; // Primary background color
+  color: design.$color-white; // Primary text color
+  border-color: design.$color-main-500;
+
+  &:hover:not(:disabled) {
+    background-color: design.$color-main-600; // Darker shade on hover
+    border-color: design.$color-main-600;
+  }
+}
+
+.button-disabled {
+  // Disabled button styles
+  background-color: design.$color-black-200; // Disabled background color
+  color: design.$color-black-500; // Disabled text color
+  border-color: design.$color-black-300;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

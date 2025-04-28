@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import com.xsh.user.model.User;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,6 +32,7 @@ public class UserRepository {
         user.setName(rs.getString("name"));
         user.setEmail(rs.getString("email"));
         user.setBio(rs.getString("bio"));
+        user.setLogo(rs.getString("logo"));
         user.setCreatedAt(rs.getObject("created_at", java.time.OffsetDateTime.class));
         return user;
     };
@@ -68,27 +71,45 @@ public class UserRepository {
             // Insert new user
             UUID id = UUID.randomUUID();
             jdbcTemplate.update(
-                    "INSERT INTO users (id, handle, name, email, bio) VALUES (?, ?, ?, ?, ?)",
+                    "INSERT INTO users (id, handle, name, email, bio, logo) VALUES (?, ?, ?, ?, ?, ?)",
                     id,
                     user.getHandle(),
                     user.getName(),
                     user.getEmail(),
-                    user.getBio()
+                    user.getBio(),
+                    user.getLogo()
             );
             user.setId(id);
             return findById(id).orElseThrow();
         } else {
             // Update existing user
             jdbcTemplate.update(
-                    "UPDATE users SET handle = ?, name = ?, email = ?, bio = ? WHERE id = ?",
+                    "UPDATE users SET handle = ?, name = ?, email = ?, bio = ?, logo = ? WHERE id = ?",
                     user.getHandle(),
                     user.getName(),
                     user.getEmail(),
                     user.getBio(),
+                    user.getLogo(),
                     user.getId()
             );
             return findById(user.getId()).orElseThrow();
         }
+    }
+
+    // Add new method to find users by IDs
+    public List<User> findByIds(List<UUID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        String placeholders = String.join(",", Collections.nCopies(ids.size(), "?"));
+        String sql = String.format("SELECT * FROM users WHERE id IN (%s)", placeholders);
+        
+        return jdbcTemplate.query(
+            sql,
+            userRowMapper,
+            ids.toArray()
+        );
     }
 
     public void deleteById(UUID id) {

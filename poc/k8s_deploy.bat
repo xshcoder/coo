@@ -19,3 +19,5 @@ kubectl apply -f k8s/search-service.yaml
 kubectl apply -f k8s/search-service-deployment.yaml
 kubectl apply -f k8s/personalize-service.yaml
 kubectl apply -f k8s/personalize-service-deployment.yaml
+kubectl apply -f k8s/statistics-service.yaml
+kubectl apply -f k8s/statistics-service-deployment.yaml

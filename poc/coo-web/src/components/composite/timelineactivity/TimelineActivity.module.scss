@@ -1,0 +1,114 @@
+@use "../../../assets/styles/design"; // Adjust path if necessary
+
+.timelineActivityContainer {
+  display: flex;
+  align-items: start;
+  gap: design.$spacing-sm; // Space between timeline activity and comments
+  border: 1px solid design.$color-black-300;
+  border-radius: design.$border-radius-sm;
+  padding: design.$spacing-m design.$spacing-m design.$spacing-xs design.$spacing-m; // Padding for the timeline activity and comments;
+  margin-bottom: design.$spacing-sm; // Space between timeline activitys
+  font-family: design.$font-family;
+  background-color: design.$color-white;
+  transition: background-color 0.2s ease; // Add transition for smooth effect
+  cursor: pointer; // Optional: Indicate the whole timeline activity is clickable
+
+  &:hover {
+    background-color: design.$color-black-100; // Light grey background on hover
+  }
+}
+
+.userIcon {
+  width: 48px; // Example size
+  height: 48px; // Example size
+  border-radius: 50%; // Make it circular
+  margin-right: design.$spacing-sm;
+  object-fit: cover; // Ensure image covers the area
+  background-color: design.$color-black-200; // Placeholder background
+}
+
+.timelineActivity {
+
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: design.$spacing-sm;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: design.$spacing-xs; // Space between user info items
+  font-size: design.$fontsize-sm;
+  color: design.$color-black-700;
+}
+
+.userName {
+  font-weight: 600;
+  color: design.$color-black-900;
+}
+
+.userHandle {
+  // Style for user handle
+}
+
+.separator {
+  // Style for the separator dot
+}
+
+.createdAt {
+  // Style for the creation date
+}
+
+.content {
+  margin-bottom: design.$spacing-sm;
+  font-size: design.$fontsize-m;
+  line-height: 1.6;
+  color: design.$color-black-900;
+  white-space: pre-wrap; // Preserve whitespace and line breaks
+  word-wrap: break-word; // Break long words
+}
+
+.footer {
+  display: flex;
+  justify-content: space-around; // Distribute actions evenly
+  align-items: center;
+  color: design.$color-black-600;
+  font-size: design.$fontsize-sm;
+  margin-top: design.$spacing-sm; // Add some space above the footer
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: design.$spacing-xs;
+  cursor: pointer; // Indicate interactivity
+  padding: design.$spacing-xs design.$spacing-sm; // Add padding for better hover area
+  border-radius: design.$border-radius-sm; // Rounded corners for hover effect
+  transition: background-color 0.2s ease, color 0.2s ease; // Smooth transition
+
+  &:hover {
+    background-color: design.$color-black-100; // Light background highlight on hover
+    color: design.$color-main-600; // Change text/icon color on hover
+
+    // Target the SVG within the hovered action item if specific color change is needed
+    .actionIcon {
+       // filter: brightness(0.8); // Example: slightly darken icon on hover
+       // Or change fill/stroke if SVGs are designed for it
+    }
+  }
+}
+
+.actionIcon {
+  width: 16px; // Set desired icon size
+  height: 16px; // Set desired icon size
+  // Add fill or stroke if your SVGs use currentColor or need specific colors
+  // fill: currentColor; // Example if SVGs are designed to inherit color
+}
+
+// Placeholder for icon styling if needed
+span:first-child { // Target the icon placeholder
+  // Add icon styles here
+}

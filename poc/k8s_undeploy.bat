@@ -1,3 +1,5 @@
+kubectl delete -f k8s/statistics-service.yaml
+kubectl delete -f k8s/statistics-service-deployment.yaml
 kubectl delete -f k8s/personalize-service.yaml
 kubectl delete -f k8s/personalize-service-deployment.yaml
 kubectl delete -f k8s/search-service.yaml

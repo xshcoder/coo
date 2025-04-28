@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -109,5 +110,20 @@ class UserControllerTest {
 
         mockMvc.perform(delete("/api/users/{id}", userId))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void getUsersByIds_ShouldReturnListOfUsers() throws Exception {
+        // Arrange
+        List<UUID> userIds = Arrays.asList(userId);
+        List<User> users = Arrays.asList(testUser);
+        when(userService.getUsersByIds(userIds)).thenReturn(users);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/users/ids")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userIds)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].handle").value(testUser.getHandle()));
     }
 }

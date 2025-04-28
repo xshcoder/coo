@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -175,5 +173,99 @@ class LikeRepositoryTest {
         // Assert
         Optional<Like> result = likeRepository.findByReplyIdAndUserId(replyId, userId);
         assertFalse(result.isPresent());
+    }
+
+    @Test
+    void save_ShouldIncrementLikesCountInStatistics_WhenLikingCoo() {
+        // Arrange
+        Like like = new Like();
+        like.setCooId(cooId);
+        like.setUserId(userId);
+        like.setLikedToUserId(likedToUserId);
+        
+        // Act
+        Like savedLike = likeRepository.save(like);
+        
+        // Assert
+        assertNotNull(savedLike.getId());
+        
+        // Verify statistics were updated
+        Integer likesCount = jdbcTemplate.queryForObject(
+            "SELECT likes_count FROM statistics WHERE subject_id = ? AND subject_type = 'COO'",
+            Integer.class,
+            cooId
+        );
+        assertEquals(1, likesCount);
+    }
+
+    @Test
+    void save_ShouldIncrementLikesCountInStatistics_WhenLikingReply() {
+        // Arrange
+        Like like = new Like();
+        like.setReplyId(replyId);
+        like.setUserId(userId);
+        like.setLikedToUserId(likedToUserId);
+        
+        // Act
+        Like savedLike = likeRepository.save(like);
+        
+        // Assert
+        assertNotNull(savedLike.getId());
+        
+        // Verify statistics were updated
+        Integer likesCount = jdbcTemplate.queryForObject(
+            "SELECT likes_count FROM statistics WHERE subject_id = ? AND subject_type = 'REPLY'",
+            Integer.class,
+            replyId
+        );
+        assertEquals(1, likesCount);
+    }
+
+    @Test
+    void delete_ShouldDecrementLikesCountInStatistics_WhenUnlikingCoo() {
+        // Arrange
+        Like like = new Like();
+        like.setCooId(cooId);
+        like.setUserId(userId);
+        like.setLikedToUserId(likedToUserId);
+        Like savedLike = likeRepository.save(like);
+        
+        // Act
+        likeRepository.delete(savedLike.getId());
+        
+        // Assert
+        assertTrue(likeRepository.findById(savedLike.getId()).isEmpty());
+        
+        // Verify statistics were updated
+        Integer likesCount = jdbcTemplate.queryForObject(
+            "SELECT likes_count FROM statistics WHERE subject_id = ? AND subject_type = 'COO'",
+            Integer.class,
+            cooId
+        );
+        assertEquals(0, likesCount);
+    }
+
+    @Test
+    void delete_ShouldDecrementLikesCountInStatistics_WhenUnlikingReply() {
+        // Arrange
+        Like like = new Like();
+        like.setReplyId(replyId);
+        like.setUserId(userId);
+        like.setLikedToUserId(likedToUserId);
+        Like savedLike = likeRepository.save(like);
+        
+        // Act
+        likeRepository.delete(savedLike.getId());
+        
+        // Assert
+        assertTrue(likeRepository.findById(savedLike.getId()).isEmpty());
+        
+        // Verify statistics were updated
+        Integer likesCount = jdbcTemplate.queryForObject(
+            "SELECT likes_count FROM statistics WHERE subject_id = ? AND subject_type = 'REPLY'",
+            Integer.class,
+            replyId
+        );
+        assertEquals(0, likesCount);
     }
 }

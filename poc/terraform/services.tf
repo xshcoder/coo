@@ -131,6 +131,25 @@ resource "kubernetes_service" "personalize_service" {
   ]
 }
 
+resource "kubernetes_service" "statistics_service" {
+  metadata {
+    name = "statistics_service"
+  }
+  spec {
+    selector = {
+      app = "statistics_service"
+    }
+    port {
+      port        = 80
+      target_port = 8080
+    }
+    type = "ClusterIP"
+  }
+  depends_on = [
+    kubernetes_deployment.statistics_service_deployment
+  ]
+}
+
 resource "kubernetes_ingress_v1" "coo_ingress" {
   metadata {
     name = "coo-ingress"
@@ -223,6 +242,18 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
             }
           }
         }
+        path {
+          path      = "/api/statistics"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = kubernetes_service.statistics_service.metadata.0.name
+              port {
+                number = 80
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -233,6 +264,7 @@ resource "kubernetes_ingress_v1" "coo_ingress" {
     kubernetes_service.user_service,
     kubernetes_service.follow_service,
     kubernetes_service.search_service,
-    kubernetes_service.personalize_service
+    kubernetes_service.personalize_service,
+    kubernetes_service.statistics_service
   ]
 }

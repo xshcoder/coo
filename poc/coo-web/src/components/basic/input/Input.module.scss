@@ -1,0 +1,77 @@
+@use "../../../assets/styles/design"; // Adjust path if necessary
+
+.input-wrapper {
+  position: relative; // Needed for absolute positioning of the icon
+  width: 100%; // Make wrapper take full width like the input did
+}
+
+.input-icon-left {
+  position: absolute;
+  left: design.$spacing-m; // Position icon from the left
+  top: 50%;
+  transform: translateY(-50%); // Center vertically
+  width: 16px; // Adjust icon size as needed
+  height: 16px; // Adjust icon size as needed
+  color: design.$color-black-600; // Adjust icon color if needed
+  pointer-events: none; // Prevent icon from interfering with input focus/clicks
+}
+
+.input {
+  // Base input styles
+  padding: design.$spacing-sm design.$spacing-m;
+  border: 1px solid design.$color-black-400;
+  font-size: design.$fontsize-m;
+  background-color: design.$color-white;
+  color: design.$color-black-900;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box; // Ensure padding doesn't add to width/height
+  width: 100%; // Default to full width, can be overridden by parent
+
+  &:focus {
+    outline: none; // Remove default browser outline
+    border-color: design.$color-main-500; // Change border color on focus
+    // Optional: Add a subtle box-shadow for focus indication
+    box-shadow: 0 0 0 1px design.$color-main-500;
+  }
+
+  &::placeholder {
+    color: design.$color-black-500; // Style placeholder text
+    opacity: 1; // Ensure placeholder is visible
+  }
+}
+
+// Add padding to the input when an icon is present
+.input-with-icon-left {
+  // Adjust left padding to make space for the icon + some gap
+  // Original padding-left was $spacing-m. Icon width is 16px. Add gap $spacing-sm.
+  // Example calculation: design.$spacing-m + 16px + design.$spacing-sm
+  padding-left: calc(#{design.$spacing-m} + 16px + #{design.$spacing-sm});
+}
+
+
+// Radius modifiers (assuming these variables exist in _design.scss)
+.input-radius-sm {
+  border-radius: design.$border-radius-sm;
+}
+.input-radius-m {
+  border-radius: design.$border-radius-m;
+}
+.input-radius-l {
+  border-radius: design.$border-radius-l; // Assuming this exists
+}
+
+
+.input-disabled {
+  // Disabled input styles
+  background-color: design.$color-black-100; // Lighter background for disabled
+  color: design.$color-black-500; // Dimmer text color
+  border-color: design.$color-black-300;
+  cursor: not-allowed;
+  opacity: 0.7;
+
+  &:focus {
+     // Prevent focus styles when disabled
+     border-color: design.$color-black-300;
+     box-shadow: none;
+  }
+}

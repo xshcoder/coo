@@ -10,8 +10,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -19,9 +21,13 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -123,5 +129,34 @@ class ReplyControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].id").value(replyId.toString()));
+    }
+    
+    @Test
+    void deleteReply_WhenUserIsAuthorized_ShouldReturnNoContent() throws Exception {
+        UUID replyId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        
+        doNothing().when(replyService).deleteReply(replyId, userId);
+        
+        mockMvc.perform(delete("/api/replies/{replyId}", replyId)
+                .param("userId", userId.toString()))
+                .andExpect(status().isNoContent());
+                
+        verify(replyService).deleteReply(replyId, userId);
+    }
+    
+    @Test
+    void deleteReply_WhenUserIsNotAuthorized_ShouldReturnForbidden() throws Exception {
+        UUID replyId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        
+        doThrow(new ResponseStatusException(HttpStatus.FORBIDDEN))
+            .when(replyService).deleteReply(replyId, userId);
+        
+        mockMvc.perform(delete("/api/replies/{replyId}", replyId)
+                .param("userId", userId.toString()))
+                .andExpect(status().isForbidden());
+                
+        verify(replyService).deleteReply(replyId, userId);
     }
 }

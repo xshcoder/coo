@@ -159,4 +159,57 @@ class ReplyServiceTest {
         assertEquals(expectedPage, actualPage);
         verify(replyRepository).findByRepliedToReplyIdOrderByCreatedAtDesc(replyId, pageable);
     }
+    
+    @Test
+    void deleteReply_WhenReplyExistsAndUserIsAuthorized_ShouldDeleteReply() {
+        // Arrange
+        UUID replyId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        
+        Reply reply = new Reply();
+        reply.setId(replyId);
+        reply.setUserId(userId);
+        
+        when(replyRepository.findById(replyId)).thenReturn(Optional.of(reply));
+        
+        // Act
+        replyService.deleteReply(replyId, userId);
+        
+        // Assert
+        verify(replyRepository).findById(replyId);
+        verify(replyRepository).deleteById(replyId);
+    }
+    
+    @Test
+    void deleteReply_WhenReplyDoesNotExist_ShouldThrowException() {
+        // Arrange
+        UUID replyId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        
+        when(replyRepository.findById(replyId)).thenReturn(Optional.empty());
+        
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> replyService.deleteReply(replyId, userId));
+        verify(replyRepository).findById(replyId);
+        verify(replyRepository, never()).deleteById(any());
+    }
+    
+    @Test
+    void deleteReply_WhenUserIsNotAuthorized_ShouldThrowException() {
+        // Arrange
+        UUID replyId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID differentUserId = UUID.randomUUID();
+        
+        Reply reply = new Reply();
+        reply.setId(replyId);
+        reply.setUserId(userId); // Different from the userId we'll pass to delete
+        
+        when(replyRepository.findById(replyId)).thenReturn(Optional.of(reply));
+        
+        // Act & Assert
+        assertThrows(ResponseStatusException.class, () -> replyService.deleteReply(replyId, differentUserId));
+        verify(replyRepository).findById(replyId);
+        verify(replyRepository, never()).deleteById(any());
+    }
 }

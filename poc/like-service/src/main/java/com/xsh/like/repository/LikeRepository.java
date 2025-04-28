@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xsh.like.model.Like;
 
@@ -125,6 +126,7 @@ public class LikeRepository {
         return new PageImpl<>(content, pageable, total);
     }
 
+    @Transactional
     public Like save(Like like) {
         if (like.getId() == null) {
             // Insert new like
@@ -138,12 +140,63 @@ public class LikeRepository {
                     like.getLikedToUserId()
             );
             like.setId(id);
+            
+            // Update statistics table - increment likes_count
+            if (like.getCooId() != null) {
+                // It's a like for a coo
+                jdbcTemplate.update(
+                    "INSERT INTO statistics (id, subject_id, subject_type, likes_count) " +
+                    "VALUES (?, ?, 'COO', 1) " +
+                    "ON CONFLICT (subject_id, subject_type) " +
+                    "DO UPDATE SET likes_count = statistics.likes_count + 1, updated_at = CURRENT_TIMESTAMP",
+                    UUID.randomUUID(), // Generate a new ID for the statistics row
+                    like.getCooId()
+                );
+            } else if (like.getReplyId() != null) {
+                // It's a like for a reply
+                jdbcTemplate.update(
+                    "INSERT INTO statistics (id, subject_id, subject_type, likes_count) " +
+                    "VALUES (?, ?, 'REPLY', 1) " +
+                    "ON CONFLICT (subject_id, subject_type) " +
+                    "DO UPDATE SET likes_count = statistics.likes_count + 1, updated_at = CURRENT_TIMESTAMP",
+                    UUID.randomUUID(), // Generate a new ID for the statistics row
+                    like.getReplyId()
+                );
+            }
+            
             return findById(id).orElseThrow();
         }
         return like;
     }
 
+    @Transactional
     public void delete(UUID id) {
+        // Get the like details before deleting
+        Optional<Like> likeOpt = findById(id);
+        if (likeOpt.isPresent()) {
+            Like like = likeOpt.get();
+            
+            // Update statistics table - decrement likes_count
+            if (like.getCooId() != null) {
+                // It's a like for a coo
+                jdbcTemplate.update(
+                    "UPDATE statistics SET likes_count = GREATEST(0, likes_count - 1), " +
+                    "updated_at = CURRENT_TIMESTAMP " +
+                    "WHERE subject_id = ? AND subject_type = 'COO'",
+                    like.getCooId()
+                );
+            } else if (like.getReplyId() != null) {
+                // It's a like for a reply
+                jdbcTemplate.update(
+                    "UPDATE statistics SET likes_count = GREATEST(0, likes_count - 1), " +
+                    "updated_at = CURRENT_TIMESTAMP " +
+                    "WHERE subject_id = ? AND subject_type = 'REPLY'",
+                    like.getReplyId()
+                );
+            }
+        }
+        
+        // Delete the like
         jdbcTemplate.update("DELETE FROM likes WHERE id = ?", id);
     }
 

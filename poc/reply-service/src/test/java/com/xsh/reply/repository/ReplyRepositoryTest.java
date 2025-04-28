@@ -64,6 +64,7 @@ class ReplyRepositoryTest {
             "INSERT INTO replies (id, coo_id, user_id, content, replied_to_user_id, replied_to_reply_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
             replyToReplyId, cooId, userId, "Reply to reply content", userId, replyId, OffsetDateTime.now()
         );
+        
     }
 
     @Test
@@ -125,6 +126,42 @@ class ReplyRepositoryTest {
         assertNotNull(savedReply.getId());
         assertEquals(cooId, savedReply.getCooId());
         assertEquals("New reply content", savedReply.getContent());
+        
+        // Verify statistics were updated
+        Integer repliesCount = jdbcTemplate.queryForObject(
+            "SELECT replies_count FROM statistics WHERE subject_id = ? AND subject_type = 'COO'",
+            Integer.class,
+            cooId
+        );
+        assertNotNull(repliesCount);
+        assertTrue(repliesCount > 0);
+    }
+    
+    @Test
+    void save_ShouldCreateNewReplyToReply() {
+        // Arrange
+        Reply newReply = new Reply();
+        newReply.setCooId(cooId);
+        newReply.setUserId(userId);
+        newReply.setContent("New reply to reply content");
+        newReply.setRepliedToUserId(userId);
+        newReply.setRepliedToReplyId(replyId);
+
+        // Act
+        Reply savedReply = replyRepository.save(newReply);
+
+        // Assert
+        assertNotNull(savedReply.getId());
+        assertEquals(replyId, savedReply.getRepliedToReplyId());
+        
+        // Verify statistics were updated
+        Integer repliesCount = jdbcTemplate.queryForObject(
+            "SELECT replies_count FROM statistics WHERE subject_id = ? AND subject_type = 'REPLY'",
+            Integer.class,
+            replyId
+        );
+        assertNotNull(repliesCount);
+        assertTrue(repliesCount > 0);
     }
 
     @Test
@@ -139,5 +176,84 @@ class ReplyRepositoryTest {
         // Assert
         assertEquals(replyId, updatedReply.getId());
         assertEquals("Updated content", updatedReply.getContent());
+    }
+    
+    @Test
+    void deleteById_ShouldRemoveReply() {
+        // Act
+        replyRepository.deleteById(replyId);
+        
+        // Assert
+        Optional<Reply> result = replyRepository.findById(replyId);
+        assertTrue(result.isEmpty());
+    }
+    
+    @Test
+    void deleteById_ShouldUpdateStatisticsForCooReply() {
+        // Arrange
+        // First create a statistics entry for the coo
+        UUID statId = UUID.randomUUID();
+        jdbcTemplate.update(
+            "INSERT INTO statistics (id, subject_id, subject_type, replies_count) VALUES (?, ?, 'COO', ?)",
+            statId, cooId, 5
+        );
+        
+        // Act
+        replyRepository.deleteById(replyId);
+        
+        // Assert
+        Integer repliesCount = jdbcTemplate.queryForObject(
+            "SELECT replies_count FROM statistics WHERE subject_id = ? AND subject_type = 'COO'",
+            Integer.class,
+            cooId
+        );
+        assertNotNull(repliesCount);
+        assertEquals(4, repliesCount);
+    }
+    
+    @Test
+    void deleteById_ShouldUpdateStatisticsForReplyToReply() {
+        // Arrange
+        // First create a statistics entry for the reply
+        UUID statId = UUID.randomUUID();
+        jdbcTemplate.update(
+            "INSERT INTO statistics (id, subject_id, subject_type, replies_count) VALUES (?, ?, 'REPLY', ?)",
+            statId, replyId, 3
+        );
+        
+        // Act
+        replyRepository.deleteById(replyToReplyId);
+        
+        // Assert
+        Integer repliesCount = jdbcTemplate.queryForObject(
+            "SELECT replies_count FROM statistics WHERE subject_id = ? AND subject_type = 'REPLY'",
+            Integer.class,
+            replyId
+        );
+        assertNotNull(repliesCount);
+        assertEquals(2, repliesCount);
+    }
+    
+    @Test
+    void deleteById_ShouldNotReduceStatisticsBelowZero() {
+        // Arrange
+        // First create a statistics entry with zero count
+        UUID statId = UUID.randomUUID();
+        jdbcTemplate.update(
+            "INSERT INTO statistics (id, subject_id, subject_type, replies_count) VALUES (?, ?, 'COO', ?)",
+            statId, cooId, 0
+        );
+        
+        // Act
+        replyRepository.deleteById(replyId);
+        
+        // Assert
+        Integer repliesCount = jdbcTemplate.queryForObject(
+            "SELECT replies_count FROM statistics WHERE subject_id = ? AND subject_type = 'COO'",
+            Integer.class,
+            cooId
+        );
+        assertNotNull(repliesCount);
+        assertEquals(0, repliesCount);
     }
 }

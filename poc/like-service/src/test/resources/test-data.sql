@@ -34,3 +34,14 @@ CREATE TABLE IF NOT EXISTS likes (
         (coo_id IS NULL AND reply_id IS NOT NULL)
     )
 );
+
+CREATE TABLE IF NOT EXISTS statistics (
+    id UUID PRIMARY KEY,
+    subject_id UUID NOT NULL,
+    subject_type VARCHAR(10) NOT NULL CHECK (subject_type IN ('COO', 'REPLY')),
+    replies_count INTEGER DEFAULT 0,
+    likes_count INTEGER DEFAULT 0,
+    views_count INTEGER DEFAULT 0,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_subject UNIQUE (subject_id, subject_type)
+);

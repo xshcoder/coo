@@ -51,6 +51,12 @@ export interface User {
     bio?: string;
     /**
      * 
+     * @type {string}
+     * @memberof User
+     */
+    logo?: string;
+    /**
+     * 
      * @type {Date}
      * @memberof User
      */
@@ -79,6 +85,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'name': json['name'] == null ? undefined : json['name'],
         'email': json['email'] == null ? undefined : json['email'],
         'bio': json['bio'] == null ? undefined : json['bio'],
+        'logo': json['logo'] == null ? undefined : json['logo'],
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
     };
 }
@@ -99,6 +106,7 @@ export function UserToJSONTyped(value?: User | null, ignoreDiscriminator: boolea
         'name': value['name'],
         'email': value['email'],
         'bio': value['bio'],
+        'logo': value['logo'],
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
     };
 }

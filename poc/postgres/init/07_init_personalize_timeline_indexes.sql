@@ -1,8 +1,5 @@
 -- Create indexes for personalize timeline queries
 
--- Index for follows table to optimize follower lookups
-CREATE INDEX IF NOT EXISTS idx_follows_follower_id ON follows(follower_id);
-
 -- Index for coos table to optimize timeline sorting
 CREATE INDEX IF NOT EXISTS idx_coos_created_at ON coos(created_at DESC);
 

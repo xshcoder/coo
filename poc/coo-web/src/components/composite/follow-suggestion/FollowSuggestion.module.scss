@@ -1,0 +1,79 @@
+@use "../../../assets/styles/design";
+
+.followSuggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: design.$spacing-sm design.$spacing-m; // Add horizontal padding if parent doesn't have it
+  gap: design.$spacing-sm;
+  border-radius: design.$border-radius-sm; // Add border-radius for hover effect
+  transition: background-color 0.2s ease; // Add transition
+  cursor: pointer; // Optional: Indicate interactivity
+
+  &:hover {
+    background-color: design.$color-black-200; // Use a slightly darker grey background on hover
+  }
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: design.$spacing-sm;
+  min-width: 0; // Prevent text overflow issues in flex item
+}
+
+.userIcon {
+  width: 40px; // Consistent size
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0; // Prevent icon from shrinking
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  font-size: design.$fontsize-sm;
+  overflow: hidden; // Hide overflow
+}
+
+.userName {
+  font-weight: 600;
+  color: design.$color-black-900;
+  white-space: nowrap; // Prevent wrapping
+  overflow: hidden;
+  text-overflow: ellipsis; // Add ellipsis if name is too long
+}
+
+.userHandle {
+  color: design.$color-black-700;
+  white-space: nowrap; // Prevent wrapping
+  overflow: hidden;
+  text-overflow: ellipsis; // Add ellipsis if handle is too long
+}
+
+// Style for the dark follow button
+.followButton {
+  // Override default button styles if necessary, or use Button props
+  background-color: design.$color-black-900;
+  color: design.$color-white;
+  border: none;
+  padding: design.$spacing-xs design.$spacing-m; // Adjust padding
+  font-size: design.$fontsize-sm;
+  font-weight: 600;
+  border-radius: design.$border-radius-l; // Make it more pill-shaped
+  cursor: pointer;
+  transition: background-color 0.2s ease; // Keep transition for potential future effects
+  flex-shrink: 0; // Prevent button from shrinking
+
+  // Explicitly define hover state to override base Button hover
+  &:hover {
+    background-color: design.$color-black-900 !important; // Keep the same background color
+    color: design.$color-white; // Keep the same text color
+    // Add any other properties that might be changing in the base Button hover state
+    // e.g., border-color: initial;
+  }
+
+  // If using the primary prop on Button, you might need to adjust
+  // &:not(.button-primary) { ... } or ensure primary is false
+}

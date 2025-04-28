@@ -12,6 +12,8 @@ This project demonstrates how to run a PostgreSQL database and Spring Boot micro
 - `like-service/` - Spring Boot microservice for managing likes to coos or replies
 - `follow-service/` - Spring Boot microservice for managing user follows
 - `search-service/` - Spring Boot microservice for searching users and coos
+- `personalize-service/` - Spring Boot microservice for personalizing data for users
+- `statistics-service/` - Spring Boot microservice for collecting statistics about coos and replies
 
 ## Prerequisites
 
@@ -45,6 +47,9 @@ Follow the instructions in this README to build and deploy the application.
 ### build personalize service docker image
 - docker build -t personalize-service:latest .
 
+### build statistics service docker image
+- docker build -t statistics-service:latest .
+
 ### deploy postgres service & user service
 - deploy.bat
 
@@ -68,6 +73,9 @@ Follow the instructions in this README to build and deploy the application.
 
 ### personalize service swagger url
 - http://localhost/personalize/swagger-ui/index.html
+
+### statistics service swagger url
+- http://localhost/statistics/swagger-ui/index.html
 
 ### install ingress controller
 - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml
